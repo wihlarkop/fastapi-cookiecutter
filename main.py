@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 app = FastAPI(
-    title={% cookiecutter.project_name %}
+    title="{{ cookiecutter.project_name }}"
 )
 
 
