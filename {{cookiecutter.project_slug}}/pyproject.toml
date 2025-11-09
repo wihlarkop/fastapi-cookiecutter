@@ -1,0 +1,119 @@
+[project]
+name = "{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.description }}"
+requires-python = ">={{ cookiecutter.python_version }}"
+dependencies = [
+    "fastapi>=0.119.0",
+    "orjson>=3.10.18",
+    "pydantic-settings>=2.11.0",
+    "python-multipart>=0.0.20",
+    "uvicorn>=0.37.0",
+{%- if cookiecutter.use_database == "yes" %}
+    "sqlalchemy>=2.0.44",
+    "greenlet>=3.2.4",
+{%- if cookiecutter.database_type == "PostgreSQL" %}
+{%- if cookiecutter.use_async_database == "yes" %}
+    "psycopg>=3.2.0",
+{%- else %}
+    "psycopg2-binary>=2.9.0",
+{%- endif %}
+{%- elif cookiecutter.database_type == "MySQL" %}
+{%- if cookiecutter.use_async_database == "yes" %}
+    "asyncmy>=0.2.0",
+{%- else %}
+    "pymysql>=1.1.0",
+{%- endif %}
+{%- elif cookiecutter.database_type == "SQLite" %}
+{%- if cookiecutter.use_async_database == "yes" %}
+    "aiosqlite>=0.20.0",
+{%- endif %}
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.use_alembic == "yes" %}
+    "alembic>=1.17.0",
+{%- endif %}
+{%- if cookiecutter.use_cloud_sql == "yes" %}
+    "cloud-sql-python-connector[asyncpg]>=1.18.5",
+{%- endif %}
+{%- if cookiecutter.use_structured_logging == "yes" %}
+    "structlog>=25.4.0",
+    "python-json-logger>=4.0.0",
+{%- endif %}
+{%- if cookiecutter.use_jwt == "yes" %}
+    "pyjwt>=2.10.1",
+{%- endif %}
+{%- if cookiecutter.include_authentication == "yes" %}
+    "argon2-cffi>=23.1.0",
+{%- endif %}
+{%- if cookiecutter.include_middleware_logging == "yes" %}
+    "httpx>=0.25.0",
+{%- endif %}
+]
+
+[dependency-groups]
+dev = [
+{%- if cookiecutter.use_ruff == "yes" %}
+    "ruff>=0.13.1",
+{%- endif %}
+{%- if cookiecutter.include_testing == "yes" %}
+    "pytest>=8.0.0",
+{%- if cookiecutter.use_async_database == "yes" %}
+    "pytest-asyncio>=1.2.0",
+{%- endif %}
+    "pytest-cov>=5.0.0",
+    "coverage>=7.10.7",
+    "httpx>=0.25.0",
+{%- endif %}
+]
+
+{% if cookiecutter.use_ruff == "yes" -%}
+[tool.ruff.lint]
+select = [
+    "I",
+    "F401"
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+{% endif -%}
+{% if cookiecutter.include_testing == "yes" -%}
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "--cov=src --cov-report=term-missing --cov-report=html --cov-fail-under=5"
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/conftest.py",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+{% endif -%}
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,6 +1,37 @@
 {
   "project_name": "My FastAPI Project",
   "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
-  "description": "Behold My Awesome FastAPI Project!",
-  "author_name": "Your name"
+  "description": "A FastAPI project with clean architecture",
+  "author_name": "Your Name",
+  "author_email": "your.email@example.com",
+  "version": "0.1.0",
+  "python_version": "3.13",
+
+  "use_database": "yes",
+  "database_type": ["PostgreSQL", "MySQL", "SQLite"],
+  "use_async_database": "yes",
+
+  "use_alembic": "yes",
+  "use_docker": "yes",
+  "use_cloud_sql": "no",
+
+  "include_authentication": "yes",
+  "use_jwt": "yes",
+
+  "include_testing": "yes",
+  "testing_framework": ["pytest", "unittest"],
+
+  "use_ruff": "yes",
+  "use_structured_logging": "yes",
+  "log_format": ["json", "text"],
+
+  "api_prefix": "/api/v1",
+  "default_port": "8088",
+  "include_health_check": "yes",
+
+  "include_cors": "yes",
+  "include_middleware_logging": "yes",
+  "include_external_integrations": "yes",
+
+  "timezone": "Asia/Jakarta"
 }
